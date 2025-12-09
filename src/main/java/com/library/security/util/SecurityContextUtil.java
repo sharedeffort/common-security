@@ -96,6 +96,18 @@ public final class SecurityContextUtil {
                 .orElse("anonymous");
     }
 
+    /**
+     * JPA Auditing용 현재 사용자 UUID를 Optional로 반환합니다.
+     * common-jpa의 BaseEntity와 함께 사용하기 적합합니다.
+     * 인증되지 않은 경우 Optional.empty()를 반환합니다.
+     *
+     * @return 현재 사용자의 UUID (인증된 경우), 또는 Optional.empty() (미인증 시)
+     */
+    public static Optional<UUID> getCurrentUserIdForAuditing() {
+        return getCurrentUserPrincipal()
+                .map(UserPrincipal::userId);
+    }
+
     // Authentication에서 역할 추출
     private static String extractRoleFromAuthentication(Authentication authentication) {
         return authentication.getAuthorities().stream()
